@@ -5,8 +5,6 @@
 
 text <- readLines("AF4eC.txt", encoding = "UTF-8")
                 
-# https://stackoverflow.com/questions/69497026/ocr-unbreak-the-words-cut-at-the-end-of-lines-and-keep-the-paragraphs/69497218#69497218
-
 
 # convertion en df 
 
@@ -19,13 +17,13 @@ textdf  <- textdf %>%
 
 
 textdf <-  textdf %>%
-  # mots se terminant par  "-"
-  mutate(cut_word = grepl('-$', text), 
-         # supprimer le dernier "-"
+  # mots se terminant par  "¬"
+  mutate(cut_word = grepl('¬$', text), 
+         # supprimer le dernier "¬"
          text = sub('¬$', '', text), 
          #Si cut_word récupérer le 1er mot de la valeur suivante et le coller dans la valeur actuelle.
          text = ifelse(cut_word, paste0(text, stringr::word(lead(text), 1)), text), 
-         #supprimer premier mot si le mot précédédent est coupé.
+         #supprimer premier mot si le mot précédent est coupé.
          text = ifelse(lag(cut_word, default = FALSE), sub('.*?\\s', '', text), text))
 
 # Conversion en vecteur
